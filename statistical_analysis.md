@@ -1,6 +1,6 @@
 ---
 title: "booli_scraping_statistical_analysis_markdown"
-author: "xxxx"
+author: "Claes"
 date: "`r Sys.Date()`"
 output: html_document
 ---
@@ -11,8 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r grundinstallningar}
 
-# SÃ¤tter working directory till en mapp
-setwd("C:/Users/xxxx/OneDrive/R programmering/booli_scraping")
+# Sätter working directory till en mapp
+setwd("C:/Users/claes/OneDrive/R programmering/booli_scraping")
 
 # Ladda in paket
 library(Rmisc)
@@ -26,7 +26,7 @@ library(scales)
 
 
 # R Inladdning data
-Inleder med att ladda in data genererad i tidigare fil dÃ¤r den har scrapeats frÃ¥n Booli. 
+Inleder med att ladda in data genererad i tidigare fil där den har scrapeats från Booli. 
 
 ```{r raw_data}
  raw_data <- read_csv("dat/raw_data_uppdaterad_2023-03-26_1750_objekt")
@@ -35,24 +35,24 @@ Inleder med att ladda in data genererad i tidigare fil dÃ¤r den har scrapeats 
  summary(raw_data)
 ```
 
-# MedelvÃ¤rden / genomsnittsberÃ¤kningar
+# Medelvärden / genomsnittsberäkningar
 
-**HÃ¤r kommer skattningar av olika medelvÃ¤rden gÃ¶ras **
+**Här kommer skattningar av olika medelvärden göras **
 
 - $\text{Skattning av } \hat{\mu}_{slutpris} = \bar{x} \pm t/z \cdot \frac{s}{\sqrt{n}}$
 - $\text{Skattning av } \hat{\mu}_{kvadratmeterpris} = \bar{x} \pm t/z \cdot \frac{s}{\sqrt{n}}$
-- $\text{Skattning av } \hat{\pi}_{lÃ¤n} = p_{lÃ¤n} \pm  \sqrt{ \frac{p_{lÃ¤n}(1-p_{lÃ¤n})}{n}}, \qquad \text{dÃ¤r p = stickprovsandel}$
-- $\text{Skattning av } \hat{\pi}_{lÃ¤n:bostadstyp} = p_{lÃ¤n:bostadstyp} \pm  \sqrt{ \frac{p_{lÃ¤n:bostadstyp}(1-p_{lÃ¤n:bostadstyp})}{n}}, \qquad \text{dÃ¤r p = stickprovsandel}$
+- $\text{Skattning av } \hat{\pi}_{län} = p_{län} \pm  \sqrt{ \frac{p_{län}(1-p_{län})}{n}}, \qquad \text{där p = stickprovsandel}$
+- $\text{Skattning av } \hat{\pi}_{län:bostadstyp} = p_{län:bostadstyp} \pm  \sqrt{ \frac{p_{län:bostadstyp}(1-p_{län:bostadstyp})}{n}}, \qquad \text{där p = stickprovsandel}$
 
-<br> # Detta Ã¤r syntax fÃ¶r att gÃ¶ra en linebreak i html_document
+<br> # Detta är syntax för att göra en linebreak i html_document
 \\bigskip
 
 
-#### Skattning av medelvÃ¤rdet av slutpris per lÃ¤n, med konfidensintervall dÃ¤r $\alpha = 0.05$
+#### Skattning av medelvärdet av slutpris per län, med konfidensintervall där $\alpha = 0.05$
 
-```{r LÃ¤n: plot medelvÃ¤rde slutpris}
+```{r Län: plot medelvärde slutpris}
 raw_data %>%
-  group_by(lan = fct_lump(lan, n = 5, other_level = "Ãvriga")) %>%
+  group_by(lan = fct_lump(lan, n = 5, other_level = "Övriga")) %>%
   summarise(mean_slutpris = mean(slutpris, na.rm = TRUE), 
             sd_slutpris = sd(slutpris, na.rm = TRUE),
             n = n()) %>%
@@ -64,8 +64,8 @@ raw_data %>%
   geom_point(size = 3) +
   geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +
   scale_y_continuous(labels = dollar_format(prefix = "", suffix = "kr", big.mark = " ")) +
-  labs(title = "Genomsnitt slutpris per lÃ¤n", subtitle = "KonfidensnivÃ¥ 95%",
-       x = "LÃ¤n",
+  labs(title = "Genomsnitt slutpris per län", subtitle = "Konfidensnivå 95%",
+       x = "Län",
        y = "Genomsnitt slutpris") +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1),
@@ -73,15 +73,15 @@ raw_data %>%
 ```
 
 
-HÃ¤r kan vi alltsÃ¥ se att Stockholm Ã¤r statistisk sÃ¤kerstÃ¤llt det dyraste lÃ¤net att kÃ¶pa en bostad i. AnmÃ¤rkningsvÃ¤rt Ã¤r att vi inte kan pÃ¥visa en statistiskt sÃ¤kerstÃ¤lld skillnad mellan varken GÃ¶teborg, MalmÃ¶ och SkÃ¥ne. DÃ¤remot kan vi gÃ¶ra detta mellan GÃ¶teborg gentemot VÃ¤stra GÃ¶taland och de Ãvriga. 
+Här kan vi alltså se att Stockholm är statistisk säkerställt det dyraste länet att köpa en bostad i. Anmärkningsvärt är att vi inte kan påvisa en statistiskt säkerställd skillnad mellan varken Göteborg, Malmö och Skåne. Däremot kan vi göra detta mellan Göteborg gentemot Västra Götaland och de Övriga. 
 
 
 
 
 
-```{r LÃ¤n: plot medelvÃ¤rde kvadratmeterpris}
+```{r Län: plot medelvärde kvadratmeterpris}
 raw_data %>%
-  group_by(lan = fct_lump(lan, n = 5, other_level = "Ãvriga")) %>%
+  group_by(lan = fct_lump(lan, n = 5, other_level = "Övriga")) %>%
   summarise(mean_kvadratmeterpris = mean(pris_kvadratmeter, na.rm = TRUE), 
             sd_slutpris = sd(pris_kvadratmeter, na.rm = TRUE),
             n = n()) %>%
@@ -93,8 +93,8 @@ raw_data %>%
   geom_point(size = 3) +
   geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +
   scale_y_continuous(labels = dollar_format(prefix = "", suffix = "kr", big.mark = " ")) +
-  labs(title = "Genomsnitt kvadratmeterpris per lÃ¤n", subtitle = "KonfidensnivÃ¥ 95%",
-       x = "LÃ¤n",
+  labs(title = "Genomsnitt kvadratmeterpris per län", subtitle = "Konfidensnivå 95%",
+       x = "Län",
        y = "Genomsnitt kvadratmeterpris") +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1),
@@ -104,9 +104,9 @@ raw_data %>%
 
 
 
-```{r Bostadstyp: plot medelvÃ¤rde vÃ¤rdeutveckling per bostadstyp}
+```{r Bostadstyp: plot medelvärde värdeutveckling per bostadstyp}
 raw_data %>%
-  group_by(bostadstyp = fct_lump(bostadstyp, n = 5, other_level = "Ãvriga")) %>%
+  group_by(bostadstyp = fct_lump(bostadstyp, n = 5, other_level = "Övriga")) %>%
   summarise(mean_forandring_utgangspris = mean(forandring_utgangspris, na.rm = TRUE), 
             sd_forandring_utgangspris = sd(forandring_utgangspris, na.rm = TRUE),
             n = n()) %>%
@@ -118,18 +118,18 @@ raw_data %>%
   geom_point(size = 3) +
   geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +
   scale_y_continuous(labels = dollar_format(prefix = "", suffix = "kr", big.mark = " ")) +
-  labs(title = "Genomsnitt fÃ¶rÃ¤ndring utgÃ¥ngspris - slutpris", subtitle = "KonfidensnivÃ¥ 95%",
+  labs(title = "Genomsnitt förändring utgångspris - slutpris", subtitle = "Konfidensnivå 95%",
        x = "Bostadstyp",
-       y = "Genomsnitt fÃ¶rÃ¤ndring") +
+       y = "Genomsnitt förändring") +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1),
         legend.position = "none")
 
 ```
 
-```{r LÃ¤n: plot medelvÃ¤rde vÃ¤rdeutveckling per lÃ¤n}
+```{r Län: plot medelvärde värdeutveckling per län}
 raw_data %>%
-  group_by(lan = fct_lump(lan, n = 5, other_level = "Ãvriga")) %>%
+  group_by(lan = fct_lump(lan, n = 5, other_level = "Övriga")) %>%
   summarise(mean_forandring_utgangspris = mean(forandring_utgangspris, na.rm = TRUE), 
             sd_forandring_utgangspris = sd(forandring_utgangspris, na.rm = TRUE),
             n = n()) %>%
@@ -141,9 +141,9 @@ raw_data %>%
   geom_point(size = 3) +
   geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +
   scale_y_continuous(labels = dollar_format(prefix = "", suffix = "kr", big.mark = " ")) +
-  labs(title = "Genomsnitt fÃ¶rÃ¤ndring utgÃ¥ngspris - slutpris", subtitle = "KonfidensnivÃ¥ 95%",
-       x = "LÃ¤n",
-       y = "Genomsnitt fÃ¶rÃ¤ndring") +
+  labs(title = "Genomsnitt förändring utgångspris - slutpris", subtitle = "Konfidensnivå 95%",
+       x = "Län",
+       y = "Genomsnitt förändring") +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1),
         legend.position = "none")
@@ -151,17 +151,17 @@ raw_data %>%
 ```
 
 
-HÃ¤r gÃ¥r att notera ett par olika saker:
-- Det Ã¤r statistsiskt sÃ¤kerstÃ¤llt att Stockholm har den stÃ¶rsta fÃ¶rÃ¤ndringen frÃ¥n utgÃ¥ngspris till slutpris.
-- Det Ã¤r statistsiskt sÃ¤kerstÃ¤llt att det i genomsnitt Ã¤r **hÃ¶gre** slutpris Ã¤n i Stockholm.
-- Det Ã¤r statistsiskt sÃ¤kerstÃ¤llt att det i genomsnitt Ã¤r **lÃ¤gre** slutpris Ã¤n utgÃ¥ngspris i; VÃ¤stra GÃ¶taland, MalmÃ¶, SkÃ¥ne. 
+Här går att notera ett par olika saker:
+- Det är statistsiskt säkerställt att Stockholm har den största förändringen från utgångspris till slutpris.
+- Det är statistsiskt säkerställt att det i genomsnitt är **högre** slutpris än i Stockholm.
+- Det är statistsiskt säkerställt att det i genomsnitt är **lägre** slutpris än utgångspris i; Västra Götaland, Malmö, Skåne. 
 
 
 
 
-```{r LÃ¤n: plot medelvÃ¤rde procentuell vÃ¤rdeutveckling per lÃ¤n}
+```{r Län: plot medelvärde procentuell värdeutveckling per län}
 raw_data %>%
-  group_by(lan = fct_lump(lan, n = 5, other_level = "Ãvriga")) %>%
+  group_by(lan = fct_lump(lan, n = 5, other_level = "Övriga")) %>%
   summarise(mean_forandring_utgangspris = mean(forandring_utgangspris/slutpris, na.rm = TRUE), 
             sd_forandring_utgangspris = sd(forandring_utgangspris/slutpris, na.rm = TRUE),
             n = n()) %>%
@@ -174,9 +174,9 @@ raw_data %>%
   geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +
   geom_hline(yintercept = 0) + 
   scale_y_continuous(labels = dollar_format(prefix = "", suffix = "%", big.mark = " ")) +
-  labs(title = "Genomsnitt procentuell fÃ¶rÃ¤ndring utgÃ¥ngspris - slutpris", subtitle = "KonfidensnivÃ¥ 95%",
-       x = "LÃ¤n",
-       y = "Genomsnitt fÃ¶rÃ¤ndring") +
+  labs(title = "Genomsnitt procentuell förändring utgångspris - slutpris", subtitle = "Konfidensnivå 95%",
+       x = "Län",
+       y = "Genomsnitt förändring") +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1),
         legend.position = "none")
@@ -188,10 +188,10 @@ raw_data %>%
 
 
 
-```{r Rum: plot medelvÃ¤rde slutpris}
+```{r Rum: plot medelvärde slutpris}
 
-raw_data %>% filter(bostadstyp == "LÃ¤genhet") %>% 
-  group_by(antal_rum = fct_lump(as.character(antal_rum), n = 5, other_level = "Ãvriga")) %>%
+raw_data %>% filter(bostadstyp == "Lägenhet") %>% 
+  group_by(antal_rum = fct_lump(as.character(antal_rum), n = 5, other_level = "Övriga")) %>%
   summarise(mean_slutpris = mean(slutpris, na.rm = TRUE), 
             sd_slutpris = sd(slutpris, na.rm = TRUE),
             n = n()) %>%
@@ -204,12 +204,24 @@ raw_data %>% filter(bostadstyp == "LÃ¤genhet") %>%
   geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +
   geom_hline(yintercept = 0) + 
   scale_y_continuous(labels = dollar_format(prefix = "", suffix = "kr", big.mark = " ")) +
-  labs(title = "Genomsnitt procentuell fÃ¶rÃ¤ndring utgÃ¥ngspris - slutpris", subtitle = "KonfidensnivÃ¥ 95%",
-       x = "LÃ¤n",
-       y = "Genomsnitt fÃ¶rÃ¤ndring") +
+  labs(title = "Genomsnitt procentuell förändring utgångspris - slutpris", subtitle = "Konfidensnivå 95%",
+       x = "Län",
+       y = "Genomsnitt förändring") +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1),
         legend.position = "none")
 
 ```
+
+
+
+
+
+
+
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
 
