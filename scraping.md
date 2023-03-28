@@ -5,10 +5,17 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
+---
+title: "booli_scraping_inladdning_Data"
+author: "Claes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-setwd("C:/Users/xxxx/OneDrive/R programmering/booli_scraping")
+setwd("C:/Users/claes/OneDrive/R programmering/booli_scraping")
 
 library(tidyverse)
 library(rvest)
@@ -21,9 +28,9 @@ library(httr)
 
 ```
 
-## LÃ¤nkar
+## Länkar
 
-Inleder med att skapa url-lÃ¤nkar fÃ¶r repsektive sida pÃ¥ hemnet.
+Inleder med att skapa url-länkar får repsektive sida på hemnet.
 
 ```{r}
   lank_huvud_manga <- function(Antal_sidor){
@@ -32,9 +39,9 @@ Inleder med att skapa url-lÃ¤nkar fÃ¶r repsektive sida pÃ¥ hemnet.
 # lank_huvud_manga(25)
 ```
 
-## InlÃ¤sning av data
+## Inläsning av data
 
-Vi behÃ¶ver sedan lÃ¤sa in alla olika element vilket sparas i en lista. En (1) sida Ã¤r 50 stycken objekt/annonser.
+Vi behöver sedan läsa in alla olika element vilket sparas i en lista. En (1) sida är 50 stycken objekt/annonser.
 
 ```{r}
 sold_list <- function(Antal_sidor){
@@ -52,21 +59,21 @@ sold_list(50) # 35 objekt per lista / sida
 ```
 
 ```{r}
-sold_list(50) # HÃ¤r lÃ¤ses alltsÃ¥ 50 sidor in
+sold_list(50) # Här läses alltså 50 sidor in
 ```
 
 ## Extrahering av data
 
-HÃ¤r extraheras all data frÃ¥n lÃ¤nkarna genererade ovan
+Här extraheras all data från länkarna genererade ovan
 
 ```{r}
 list_data <- lapply(urls, function(url) {
   
-  # LÃ¤ser fÃ¶rst in sidan
+  # Läser fårst in sidan
   page <- read_html(url)
   
-  # LÃ¤ser sedan in respektive variabler
-  datum <- page %>% html_node("div:contains('SÃ¥ld eller borttagen') + div") %>% html_text(trim = TRUE)
+  # Läser sedan in respektive variabler
+  datum <- page %>% html_node("div:contains('Såld eller borttagen') + div") %>% html_text(trim = TRUE)
   
   adress <- page %>% html_nodes("div._2epd7:nth-child(2) h1") %>% html_text() %>% unlist()
   
@@ -82,9 +89,9 @@ list_data <- lapply(urls, function(url) {
  
   tomtarea <- page %>% html_node("div:contains('Tomtstorlek') + div") %>% html_text(trim = TRUE) %>% str_extract("\\d+([.,]\\d+)?") %>% str_replace(",", ".")
 
-  vaning <- page %>% html_node("div:contains('VÃ¥ning') + div") %>% html_text(trim = TRUE)
+  vaning <- page %>% html_node("div:contains('Våning') + div") %>% html_text(trim = TRUE)
 
-  byggar <- page %>% html_node("div:contains('ByggÃ¥r') + div") %>% html_text(trim = TRUE)
+  byggar <- page %>% html_node("div:contains('Byggår') + div") %>% html_text(trim = TRUE)
 
   driftkostnad <- page %>% html_node("div:contains('Driftskostnad') + div") %>% html_text(trim = TRUE)
 
@@ -96,9 +103,9 @@ list_data <- lapply(urls, function(url) {
 
   lan <- page %>% html_node("div._1uxTS a:nth-child(1)") %>% html_text()
 
-  dagar_pa_booli <- page %>% html_node("div:contains('Dagar pÃ¥ Booli') + div") %>% html_text(trim = TRUE)
+  dagar_pa_booli <- page %>% html_node("div:contains('Dagar på Booli') + div") %>% html_text(trim = TRUE)
   
-  # HÃ¤r returneras all data 
+  # Här returneras all data 
   return(paste("datum:", datum,
                "adress:", adress,
                "slutpris:", slutpris,
@@ -119,12 +126,12 @@ list_data <- lapply(urls, function(url) {
 
 ## Sortering av data
 
-HÃ¤r sorteras datan upp till en dataframe. Formattering gÃ¶rs Ã¤ven i form av:
+Här sorteras datan upp till en dataframe. Formattering gårs även i form av:
 
 ```{r}
 data_frame_data <- function(data = list_data){
   list_data <- list_data
-      # HÃ¤mtar hÃ¤r in alla de respektive variablerna som skall vara med
+      # Hämtar här in alla de respektive variablerna som skall vara med
       datum <- unlist(lapply(list_data, function(x) {
         substring(x, first = regexpr("datum:", x) + nchar("datum:"), last = regexpr("adress:", x) - 2)
       }))
@@ -181,7 +188,7 @@ data_frame_data <- function(data = list_data){
         substring(x, first = regexpr("lan:", x) + nchar("lan:")+1)
       }))
      
-  # SÃ¤tter hÃ¤r in alla variablerna i respektive kolumner
+  # Sätter här in alla variablerna i respektive kolumner
   df <- data.frame(datum = datum,
                    adress = adress, 
                    omrade = omrade,
@@ -200,7 +207,7 @@ data_frame_data <- function(data = list_data){
 }
 ```
 
-Skapar sedan variabeln, alltsÃ¥ data-framen med:
+Skapar sedan variabeln, alltså data-framen med:
 
 ```{r}
 raw_data <- data_frame_data()
@@ -211,22 +218,22 @@ head(raw_data, n = 8)
 # Formatering:
 - Datum formateras
 - Adress trimmas av blanksteg
-- OmrÃ¥de trimmas av blanksteg
+- Område trimmas av blanksteg
 - Slutpris formateras till numerisk
-- UtgÃ¥ngspris formateras till numerisk
+- Utgångspris formateras till numerisk
 - Bostadstyp trimmas av blanksteg
 - Antal rum formateras till numerisk
 - Boarea formateras till numerisk
 - Tomtarea formateras till numerisk
-- ByggÃ¥r formateras till numerisk
-- Avgift/mÃ¥n formateras till numerisk
-- Driftkostnas/mÃ¥n formateras till numerisk
+- Byggår formateras till numerisk
+- Avgift/mån formateras till numerisk
+- Driftkostnas/mån formateras till numerisk
 
-# BerÃ¤kning:
-- FÃ¶rÃ¤ndring utgÃ¥ngspris mot slutpris
+# Beräkning:
+- Fårändring utgångspris mot slutpris
 - Pris kvadratmeter
-- Avgift per mÃ¥nad per kvadratmeter
-- Driftkostnad per mÃ¥nad per kvadratmeter
+- Avgift per månad per kvadratmeter
+- Driftkostnad per månad per kvadratmeter
 - Andel boarea av tomtarea
 
 ```{r}
@@ -245,7 +252,7 @@ processed_data <- raw_data %>%
     avgift_man = as.numeric(gsub("[^0-9]", "", avgift_man, perl = TRUE)),
     driftkostnad_man = as.numeric(gsub("[^0-9]", "", driftkostnad_man, perl = TRUE)),
     kommun = kommun %>% trimws(),
-    lan = str_remove(lan, "lÃ¤n") %>% str_remove("s "),
+    lan = str_remove(lan, "län") %>% str_remove("s "),
     forandring_utgangspris = slutpris - utgangspris,
     pris_kvadratmeter = slutpris / boarea,
     avgift_man_kvadratmeter = avgift_man / boarea,
@@ -258,7 +265,7 @@ processed_data <- raw_data %>%
 ## Sparar data till CSV-format
 
 ```{r pressure, echo=FALSE}
-dir.create(paste0(getwd(), "/dat")) # HÃ¤r skapas alltsÃ¥ en datamap i wd()
+dir.create(paste0(getwd(), "/dat")) # Här skapas alltså en datamap i wd()
 write_csv(processed_data, paste0(getwd(), "/dat/raw_data_uppdaterad_", today(), "_", dim(processed_data)[1], "_objekt"))
 ```
 
