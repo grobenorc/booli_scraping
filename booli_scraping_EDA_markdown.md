@@ -1,6 +1,6 @@
 ---
 title: "booli_scraping_EDA_markdown"
-author: "xxxx"
+author: "Claes"
 date: "`r Sys.Date()`"
 output: html_document
 ---
@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r grundinstallningar}
 
 # Sätter working directory till en mapp
-setwd("C:/Users/xxxxx/OneDrive/R programmering/booli_scraping")
+setwd("C:/Users/claes/OneDrive/R programmering/booli_scraping")
 
 # Ladda in paket
 library(Rmisc)
@@ -53,7 +53,7 @@ raw_data %>%
 
 ## Per län
 
-**Här kommer vi undersÃ¶ka indelat per län.**
+**Här kommer vi undersöka indelat per län.**
 
 - Antal sålda objekt per län
 - Slutpris per län
@@ -80,7 +80,7 @@ raw_data %>%
        ggplot(aes(x = slutpris, fill = lan)) +
        geom_histogram(binwidth = 100000) +
        facet_wrap(~lan, ncol = 3) +
-       labs(title = "Slutpris fÃ¶rdelat på län", x = "Slutpris", y = "Antal", fill = "Län") +
+       labs(title = "Slutpris fördelat på län", x = "Slutpris", y = "Antal", fill = "Län") +
        scale_fill_discrete(name = "Län", labels = c(levels(raw_data$lan)[1:4], "Övriga")) +
        theme(legend.position = "none")
 ```
@@ -93,7 +93,7 @@ raw_data %>%
        ggplot(aes(x = slutpris, fill = lan)) +
        geom_histogram(binwidth = 100000) +
        facet_wrap(~lan, ncol = 3) +
-       labs(title = "Slutpris fÃ¶rdelat på län", x = "Slutpris", y = "Antal", fill = "Län") +
+       labs(title = "Slutpris fördelat på län", x = "Slutpris", y = "Antal", fill = "Län") +
        scale_fill_discrete(name = "Län", labels = c(levels(raw_data$lan)[1:4], "Övriga")) +
        theme(legend.position = "none")
 ```
@@ -147,3 +147,4 @@ raw_data %>%
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
