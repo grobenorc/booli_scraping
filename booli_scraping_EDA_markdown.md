@@ -1,6 +1,6 @@
 ---
 title: "booli_scraping_EDA_markdown"
-author: "Claes"
+author: "xxxx"
 date: "`r Sys.Date()`"
 output: html_document
 ---
@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r grundinstallningar}
 
 # Sätter working directory till en mapp
-setwd("C:/Users/claes/OneDrive/R programmering/booli_scraping")
+setwd("C:/Users/xxxx/OneDrive/R programmering/booli_scraping")
 
 # Ladda in paket
 library(Rmisc)
